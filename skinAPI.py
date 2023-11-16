@@ -3,20 +3,20 @@ from base64 import b64decode
 import json
 import os
 
-OUTPUT = 'skins'
+_OUTPUT = 'skins'
 
-NAME_URL = "https://api.mojang.com/users/profiles/minecraft/{USERNAME}"
+_NAME_URL = "https://api.mojang.com/users/profiles/minecraft/{USERNAME}"
 # name_url.format(USERNAME=USERNAME)
-UUID_URL = "https://sessionserver.mojang.com/session/minecraft/profile/{UUID}"
+_UUID_URL = "https://sessionserver.mojang.com/session/minecraft/profile/{UUID}"
 # uuid_url.format(UUID=UUID)
 
-if not os.path.exists(OUTPUT):
-    os.makedirs(OUTPUT)
-    print(f"Folder '{OUTPUT}' created.")
+if not os.path.exists(_OUTPUT):
+    os.makedirs(_OUTPUT)
+    print(f"Folder '{_OUTPUT}' created.")
 else:
-    print(f"Folder '{OUTPUT}' already exists.")
+    print(f"Folder '{_OUTPUT}' already exists.")
 
-def get_response(url, username=''):
+def __get_response(url, username=''):
     response = requests.get(url)
     if response.status_code == 200:
         if not url.startswith('http://textures.minecraft.net/texture/'):
@@ -44,26 +44,26 @@ def get_response(url, username=''):
             return 0
 
 def get_skin(username):
-    name_url = NAME_URL.format(USERNAME=username)
-    uuid = get_response(name_url)
-    uuid_url = UUID_URL.format(UUID=uuid)
+    name_url = _NAME_URL.format(USERNAME=username)
+    uuid = __get_response(name_url)
+    uuid_url = _UUID_URL.format(UUID=uuid)
 
     if not uuid == 0:
-        skin_url = get_response(uuid_url)
-        get_response(skin_url, username=username)
+        skin_url = __get_response(uuid_url)
+        __get_response(skin_url, username=username)
     else:
         print('user not found')
 
 if __name__ == '__main__':
 
     username = input('username: ')
-    name_url = NAME_URL.format(USERNAME=username)
-    uuid = get_response(name_url)
-    uuid_url = UUID_URL.format(UUID=uuid)
+    name_url = _NAME_URL.format(USERNAME=username)
+    uuid = __get_response(name_url)
+    uuid_url = _UUID_URL.format(UUID=uuid)
 
     if not uuid == 0:
-        skin_url = get_response(uuid_url)
-        get_response(skin_url)
+        skin_url = __get_response(uuid_url)
+        __get_response(skin_url)
     else:
         print('user not found')
 
